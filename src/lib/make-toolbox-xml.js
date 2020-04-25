@@ -709,6 +709,47 @@ const myBlocks = function () {
     </category>
     `;
 };
+const obsolete = function (isStage) {
+    return `
+    <category name="%{BKY_CATEGORY_CONTROL}" id="" colour="#FFAB19" secondaryColour="#CF8B17">
+        <block type="control_warpspeed">
+        </block>
+        ${blockSeparator}
+        <block type="control_repeat">
+            <value name="TIMES">
+                <shadow type="math_whole_number">
+                    <field name="NUM">10</field>
+                </shadow>
+            </value>
+        </block>
+        <block id="forever" type="control_forever"/>
+        ${blockSeparator}
+        <block type="control_if"/>
+        <block type="control_if_else"/>
+        <block id="wait_until" type="control_wait_until"/>
+        <block id="repeat_until" type="control_repeat_until"/>
+        ${blockSeparator}
+        <block type="control_stop"/>
+        ${blockSeparator}
+        ${isStage ? `
+            <block type="control_create_clone_of">
+                <value name="CLONE_OPTION">
+                    <shadow type="control_create_clone_of_menu"/>
+                </value>
+            </block>
+        ` : `
+            <block type="control_start_as_clone"/>
+            <block type="control_create_clone_of">
+                <value name="CLONE_OPTION">
+                    <shadow type="control_create_clone_of_menu"/>
+                </value>
+            </block>
+            <block type="control_delete_this_clone"/>
+        `}
+        ${categorySeparator}
+    </category>
+    `;
+};
 
 const xmlOpen = '<xml style="display: none">';
 const xmlClose = '</xml>';
@@ -763,7 +804,8 @@ const makeToolboxXML = function (isStage, targetId, categoriesXML = [],
         sensingXML, gap,
         operatorsXML, gap,
         variablesXML, gap,
-        myBlocksXML
+        myBlocksXML, gap,
+        
     ];
 
     for (const extensionCategory of categoriesXML) {
